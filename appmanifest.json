@@ -1,6 +1,6 @@
 {
-	"name": "New project",
-	"short_name": "New project",
+	"name": "RPGgame",
+	"short_name": "RPGgame",
 	"description": "",
 	"start_url": "index.html",
 	"display": "fullscreen",
