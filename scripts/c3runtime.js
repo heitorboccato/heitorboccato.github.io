@@ -3893,7 +3893,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.TextBox.Acts.SetCSSStyle,
 		C3.Plugins.TextBox.Acts.SetVisible,
 		C3.Plugins.TextBox.Exps.Text,
-		C3.Plugins.Button.Acts.SetVisible
+		C3.Plugins.Button.Acts.SetVisible,
+		C3.Plugins.Text.Acts.SetVisible
 	];
 };
 self.C3_JsPropNameTable = [
@@ -3917,7 +3918,19 @@ self.C3_JsPropNameTable = [
 	{nome: 0},
 	{Nome_personagem: 0},
 	{Ok_btn: 0},
-	{Text: 0}
+	{Text: 0},
+	{Classes: 0},
+	{Assassino: 0},
+	{Barbaro: 0},
+	{Mago: 0},
+	{Arqueiro: 0},
+	{Cavaleiro: 0},
+	{ClassesText: 0},
+	{AssassinoText: 0},
+	{BarbaroText: 0},
+	{MagoText: 0},
+	{CavaleiroText: 0},
+	{ArqueiroText: 0}
 ];
 }
 
