@@ -3,6 +3,29 @@
 
 const scriptsInEvents = {
 
+	async EventSheet1_Event1_Act2(runtime, localVars)
+	{
+		var style = document.createElement('style');
+		style.innerHTML = `
+		    .ass {
+		        font-size:25px;
+				  font-family:Arial;
+				  width:75px;
+				  height:75px;
+				  border-width:1px;
+				  color:#000000;
+				  border-color:#808080;
+				  border-top-left-radius:75px;
+				  border-top-right-radius:75px;
+				  border-bottom-left-radius:75px;
+				  border-bottom-right-radius:75px;
+				  background:#A9A9A9;
+		    }
+		`;
+		
+		document.head.appendChild(style);
+	},
+
 	async EventSheet1_Event13_Act1(runtime, localVars)
 	{
 		var style = document.createElement('style');
@@ -160,8 +183,8 @@ const scriptsInEvents = {
 		    .agi_menos {
 		        font-size:30px;
 				  font-family:Arial;
-				  width:55px;
-				  height:55px;
+				  width:75px;
+				  height:75px;
 				  border-width:1px;
 				  color:#fff;
 				  border-color:#350D11;
