@@ -94,6 +94,68 @@
         .hidden {
             display: none;
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .popup-content {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .popup-buttons {
+            margin-top: 20px;
+        }
+
+        .popup-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+        #fecharpop {
+            background-color: red;
+            color: white;
+        }
+        .classes-button {
+            margin-bottom: 15px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+
+        li{
+            margin-bottom: 20px;
+            margin-right: 100%;
+        }
+
+        #classDetailsText {
+            font-size: 22px;
+        }
+        #classDetailsText2 {
+            font-size: 22px;
+        }
+        
     </style>
 </head>
 <body>
@@ -101,6 +163,9 @@
         <h1>Caminhos de Eldorian</h1>
     </header>
     <main>
+        <div>
+            <button class="classes-button" id="habilidades" onclick="showClassesPopup()">Habilidades</button>
+        </div>
         <div class="name-input" id="nameInputSection">
             <label for="name">Digite o nome do Guerreiro:</label>
             <input type="text" id="name" placeholder="Nome">
@@ -134,6 +199,32 @@
             </div>
         </div>
     </main>
+    <!-- Popup de Classes -->
+    <div class="popup" id="classesPopup">
+        <div class="popup-content">
+            <h2>Escolha uma Classe</h2>
+            <button class="popup-button" id="fecharpop" onclick="hideClassesPopup()">Fechar</button>
+            <div class="popup-buttons">
+                <ul>
+                    <li><button class="popup-button" onclick="showClassDetails('Arqueiro')">Arqueiro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Assassino')">Assassino</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Bárbaro')">Bárbaro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Cavaleiro')">Cavaleiro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Mago')">Mago</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de Detalhes da Classe -->
+    <div class="popup" id="classDetailsPopup">
+        <div class="popup-content">
+            <h2 id="classDetailsTitle"></h2>
+            <p id="classDetailsText"></p>
+            <p id="classDetailsText2"></p>
+            <button class="popup-button" id="fecharpop" onclick="hideClassDetailsPopup()">Fechar</button>
+        </div>
+    </div>
     <script>
         function setName() {
             const nameInputSection = document.getElementById('nameInputSection');
@@ -162,6 +253,49 @@
                 counterValue--;
                 counterElement.textContent = counterValue;
             }
+        }
+
+        function showClassesPopup() {
+            const classesPopup = document.getElementById('classesPopup');
+            classesPopup.style.display = 'flex';
+        }
+
+        function hideClassesPopup() {
+            const classesPopup = document.getElementById('classesPopup');
+            classesPopup.style.display = 'none';
+        }
+
+        function showClassDetails(className) {
+            const classDetailsTitle = document.getElementById('classDetailsTitle');
+            const classDetailsText = document.getElementById('classDetailsText');
+            const classDetailsText2 = document.getElementById('classDetailsText2');
+            const classDetailsPopup = document.getElementById('classDetailsPopup');
+
+            classDetailsTitle.textContent = className;
+            // Aqui você pode colocar o texto ou informações específicas de cada classe
+            if (className === 'Arqueiro') {
+                classDetailsText.textContent = '- Pode dar um tiro certeiro em um jogador que passar por ele no tabuleiro, causando 3 de dano.';
+                classDetailsText2.textContent = '- Lança uma chuva de flechas, causando 2 de dano em todos os inimigos em um raio de duas casas.';
+            } else if (className === 'Assassino') {
+                classDetailsText.textContent = '- Envenena um alvo durante o duelo, causando 2 de dano em duas rodadas e enfraquece a defesa do oponente em 2 pontos por rodada.';
+                classDetailsText2.textContent = '- Bomba de fumaça, O assassino deixa uma bomba de fumaça no terreno em que se encontra, evitando duelos. Duração de uma rodada.';
+            } else if (className === 'Bárbaro') {
+                classDetailsText.textContent = '- Modo Berserker, imune a efeitos negativos e +2 de ataque base por duas rodadas.';
+                classDetailsText2.textContent = '- Arremessa seu machado até o fim de uma linha reta do mapa, causando 3 de dano a todos os inimigos à frente dele.';
+            } else if (className === 'Cavaleiro') {
+                classDetailsText.textContent = '- Pode avançar +1, +2 ou +3 no dado de movimento, evitando duelos ou forçando-os. Não precisa rolar o dado na sua vez.';
+                classDetailsText2.textContent = '- Entra em modo de duelo e o oponente não tem chance de ganhar no dado no combate. Porém o dano total que seria aplicado é reduzido em 2.';
+            } else if (className === 'Mago') {
+                classDetailsText.textContent = '- Coloca uma bomba no tabuleiro, causando 3 de dano e impedindo o jogador afetado de jogar por uma rodada.';
+                classDetailsText2.textContent = '- Invoca um escudo ao seu redor, diminuindo todo dano em -3, por duas rodadas.';
+            }
+
+            classDetailsPopup.style.display = 'flex';
+        }
+
+        function hideClassDetailsPopup() {
+            const classDetailsPopup = document.getElementById('classDetailsPopup');
+            classDetailsPopup.style.display = 'none';
         }
     </script>
 </body>
