@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caminhos de Eldorian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .name-input {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .name-display {
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .name-input label {
+            font-size: 18px; /* Aumenta o tamanho da fonte do texto "Digite o nome do Guerreiro" */
+        }
+
+        .stats-container {
+            flex: 0 0 100%;
+            max-width: 400px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .stat label {
+            flex: 1;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .stat button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        #decrement-button {
+            background-color: red;
+            color: white;
+        }
+
+        #increment-button {
+            background-color: green;
+            color: white;
+        }
+
+        .counter {
+            flex: 1;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Caminhos de Eldorian</h1>
+    </header>
+    <main>
+        <div class="name-input" id="nameInputSection">
+            <label for="name">Digite o nome do Guerreiro:</label>
+            <input type="text" id="name" placeholder="Nome">
+            <button onclick="setName()">OK</button>
+        </div>
+        <div class="name-display hidden" id="nameDisplaySection"></div>
+        <div class="stats-container">
+            <div class="stat">
+                <label for="vida">Vida:</label>
+                <button id="decrement-button" onclick="decrementStat('vida')">-</button>
+                <div class="counter" id="vidaCounter">25</div>
+                <button id="increment-button" onclick="incrementStat('vida')">+</button>
+            </div>
+            <div class="stat">
+                <label for="ataque">Ataque:</label>
+                <button id="decrement-button" onclick="decrementStat('ataque')">-</button>
+                <div class="counter" id="ataqueCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('ataque')">+</button>
+            </div>
+            <div class="stat">
+                <label for="defesa">Defesa:</label>
+                <button id="decrement-button" onclick="decrementStat('defesa')">-</button>
+                <div class="counter" id="defesaCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('defesa')">+</button>
+            </div>
+            <div class="stat">
+                <label for="agilidade">Agilidade:</label>
+                <button id="decrement-button" onclick="decrementStat('agilidade')">-</button>
+                <div class="counter" id="agilidadeCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('agilidade')">+</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        function setName() {
+            const nameInputSection = document.getElementById('nameInputSection');
+            const nameDisplaySection = document.getElementById('nameDisplaySection');
+            const nameInput = document.getElementById('name');
+            const nameDisplay = document.createElement('div');
+            nameDisplay.textContent = nameInput.value;
+            nameDisplay.style.fontWeight = 'bold';
+            nameDisplaySection.appendChild(nameDisplay);
+
+            nameInputSection.classList.add('hidden');
+            nameDisplaySection.classList.remove('hidden');
+        }
+
+        function incrementStat(stat) {
+            const counterElement = document.getElementById(`${stat}Counter`);
+            let counterValue = parseInt(counterElement.textContent);
+            counterValue++;
+            counterElement.textContent = counterValue;
+        }
+
+        function decrementStat(stat) {
+            const counterElement = document.getElementById(`${stat}Counter`);
+            let counterValue = parseInt(counterElement.textContent);
+            if (counterValue > 0) {
+                counterValue--;
+                counterElement.textContent = counterValue;
+            }
+        }
+    </script>
+</body>
+</html>
