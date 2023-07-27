@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caminhos de Eldorian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .name-input {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .name-display {
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .name-input label {
+            font-size: 18px; /* Aumenta o tamanho da fonte do texto "Digite o nome do Guerreiro" */
+        }
+
+        .stats-container {
+            flex: 0 0 100%;
+            max-width: 400px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .stat label {
+            flex: 1;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .stat button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        #decrement-button {
+            background-color: red;
+            color: white;
+        }
+
+        #increment-button {
+            background-color: green;
+            color: white;
+        }
+
+        .counter {
+            flex: 1;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .popup-content {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .popup-buttons {
+            margin-top: 20px;
+        }
+
+        .popup-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+        #fecharpop {
+            background-color: red;
+            color: white;
+        }
+        .classes-button {
+            margin-bottom: 15px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+
+        li{
+            margin-bottom: 20px;
+            margin-right: 100%;
+        }
+
+        #classDetailsText {
+            font-size: 22px;
+        }
+        #classDetailsText2 {
+            font-size: 22px;
+        }
+        #videoShow {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: none; /* Oculta o leitor de QR Code inicialmente */
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Caminhos de Eldorian</h1>
+        <button id="someTudo">Some</button>
+    </header>
+    <main>
+        <div id="videoShow">
+            <div id="scanner-container">
+                <video id="preview" style="transform: scaleX(1);" muted></video>
+            </div>
+            <div id="result"></div>
+            <button id="startButton">Iniciar</button>
+            <button id="stopButton">Finalizar</button>
+        </div>
+        <div>
+            <button class="classes-button" id="habilidades" onclick="showClassesPopup()">Habilidades</button>
+        </div>
+        <div class="name-input" id="nameInputSection">
+            <label for="name">Digite o nome do Guerreiro:</label>
+            <input type="text" id="name" placeholder="Nome">
+            <button onclick="setName()">OK</button>
+        </div>
+        <div class="name-display hidden" id="nameDisplaySection"></div>
+        <div class="stats-container">
+            <div class="stat">
+                <label for="vida">Vida:</label>
+                <button id="decrement-button" onclick="decrementStat('vida')">-</button>
+                <div class="counter" id="vidaCounter">25</div>
+                <button id="increment-button" onclick="incrementStat('vida')">+</button>
+            </div>
+            <div class="stat">
+                <label for="ataque">Ataque:</label>
+                <button id="decrement-button" onclick="decrementStat('ataque')">-</button>
+                <div class="counter" id="ataqueCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('ataque')">+</button>
+            </div>
+            <div class="stat">
+                <label for="defesa">Defesa:</label>
+                <button id="decrement-button" onclick="decrementStat('defesa')">-</button>
+                <div class="counter" id="defesaCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('defesa')">+</button>
+            </div>
+            <div class="stat">
+                <label for="agilidade">Agilidade:</label>
+                <button id="decrement-button" onclick="decrementStat('agilidade')">-</button>
+                <div class="counter" id="agilidadeCounter">0</div>
+                <button id="increment-button" onclick="incrementStat('agilidade')">+</button>
+            </div>
+        </div>
+    </main>
+    <!-- Popup de Classes -->
+    <div class="popup" id="classesPopup">
+        <div class="popup-content">
+            <h2>Escolha uma Classe</h2>
+            <button class="popup-button" id="fecharpop" onclick="hideClassesPopup()">Fechar</button>
+            <div class="popup-buttons">
+                <ul>
+                    <li><button class="popup-button" onclick="showClassDetails('Arqueiro')">Arqueiro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Assassino')">Assassino</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Bárbaro')">Bárbaro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Cavaleiro')">Cavaleiro</button></li>
+                    <li><button class="popup-button" onclick="showClassDetails('Mago')">Mago</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de Detalhes da Classe -->
+    <div class="popup" id="classDetailsPopup">
+        <div class="popup-content">
+            <h2 id="classDetailsTitle"></h2>
+            <p id="classDetailsText"></p>
+            <p id="classDetailsText2"></p>
+            <button class="popup-button" id="fecharpop" onclick="hideClassDetailsPopup()">Fechar</button>
+        </div>
+    </div>
+    <!-- Importando a biblioteca @zxing/library -->
+    <script src="https://unpkg.com/@zxing/library@0.18.4"></script>
+    <script>
+        function setName() {
+            const nameInputSection = document.getElementById('nameInputSection');
+            const nameDisplaySection = document.getElementById('nameDisplaySection');
+            const nameInput = document.getElementById('name');
+            const nameDisplay = document.createElement('div');
+            nameDisplay.textContent = nameInput.value;
+            nameDisplay.style.fontWeight = 'bold';
+            nameDisplaySection.appendChild(nameDisplay);
+
+            nameInputSection.classList.add('hidden');
+            nameDisplaySection.classList.remove('hidden');
+        }
+
+        function incrementStat(stat) {
+            const counterElement = document.getElementById(`${stat}Counter`);
+            let counterValue = parseInt(counterElement.textContent);
+            counterValue++;
+            counterElement.textContent = counterValue;
+        }
+
+        function decrementStat(stat) {
+            const counterElement = document.getElementById(`${stat}Counter`);
+            let counterValue = parseInt(counterElement.textContent);
+            if (counterValue > 0) {
+                counterValue--;
+                counterElement.textContent = counterValue;
+            }
+        }
+
+        function showClassesPopup() {
+            const classesPopup = document.getElementById('classesPopup');
+            classesPopup.style.display = 'flex';
+        }
+
+        function hideClassesPopup() {
+            const classesPopup = document.getElementById('classesPopup');
+            classesPopup.style.display = 'none';
+        }
+
+        function showClassDetails(className) {
+            const classDetailsTitle = document.getElementById('classDetailsTitle');
+            const classDetailsText = document.getElementById('classDetailsText');
+            const classDetailsText2 = document.getElementById('classDetailsText2');
+            const classDetailsPopup = document.getElementById('classDetailsPopup');
+
+            classDetailsTitle.textContent = className;
+            // Aqui você pode colocar o texto ou informações específicas de cada classe
+            if (className === 'Arqueiro') {
+                classDetailsText.textContent = '- Pode dar um tiro certeiro em um jogador que passar por ele no tabuleiro, causando 3 de dano.';
+                classDetailsText2.textContent = '- Lança uma chuva de flechas, causando 2 de dano em todos os inimigos em um raio de duas casas.';
+            } else if (className === 'Assassino') {
+                classDetailsText.textContent = '- Envenena um alvo durante o duelo, causando 2 de dano em duas rodadas e enfraquece a defesa do oponente em 2 pontos por rodada.';
+                classDetailsText2.textContent = '- Bomba de fumaça, O assassino deixa uma bomba de fumaça no terreno em que se encontra, evitando duelos. Duração de uma rodada.';
+            } else if (className === 'Bárbaro') {
+                classDetailsText.textContent = '- Modo Berserker, imune a efeitos negativos e +2 de ataque base por duas rodadas.';
+                classDetailsText2.textContent = '- Arremessa seu machado até o fim de uma linha reta do mapa, causando 3 de dano a todos os inimigos à frente dele.';
+            } else if (className === 'Cavaleiro') {
+                classDetailsText.textContent = '- Pode avançar +1, +2 ou +3 no dado de movimento, evitando duelos ou forçando-os. Não precisa rolar o dado na sua vez.';
+                classDetailsText2.textContent = '- Entra em modo de duelo e o oponente não tem chance de ganhar no dado no combate. Porém o dano total que seria aplicado é reduzido em 2.';
+            } else if (className === 'Mago') {
+                classDetailsText.textContent = '- Coloca uma bomba no tabuleiro, causando 3 de dano e impedindo o jogador afetado de jogar por uma rodada.';
+                classDetailsText2.textContent = '- Invoca um escudo ao seu redor, diminuindo todo dano em -3, por duas rodadas.';
+            }
+
+            classDetailsPopup.style.display = 'flex';
+        }
+
+        function hideClassDetailsPopup() {
+            const classDetailsPopup = document.getElementById('classDetailsPopup');
+            classDetailsPopup.style.display = 'none';
+        }
+
+        //*****************************************************************************************
+        //*****************************************************************************************
+        //*****************************************************************************************
+        //*****************************************************************************************
+        //*****************************************************************************************
+        //*****************************************************************************************
+        const scannerContainer = document.getElementById('scanner-container');
+        const resultDiv = document.getElementById('result');
+        const vidaResult = document.getElementById('vidaCounter');
+        const ataqueResult = document.getElementById('ataqueCounter');
+        const defesaResult = document.getElementById('defesaCounter');
+        const agilidadeResult = document.getElementById('agilidadeCounter');
+        const lista = [];
+
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        let scanner = null;
+        let activeCamera = 'environment';
+        let stream = null;
+        let elementosVisiveis = false;
+
+        let valorVida = 25;
+        let valorAtaque = 0;
+        let valorDefesa = 0;
+        let valorAgilidade = 0;
+
+        let personagem = 0;
+        let arma = 0;
+
+        // Função para verificar se o ambiente suporta a API de mídia
+        function hasUserMedia() {
+            return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+        }
+
+        function atualizarValorX() {
+                vidaResult.textContent = valorVida;
+                ataqueResult.textContent = valorAtaque;
+                defesaResult.textContent = valorDefesa;
+                agilidadeResult.textContent = valorAgilidade;
+            }
+
+        // Função para inicializar a câmera com o dispositivo selecionado
+        async function startCamera(deviceId) {
+            try {
+                const constraints = {
+                    video: { deviceId: { exact: deviceId } }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                const videoElement = document.getElementById('preview');
+                videoElement.srcObject = stream;
+                videoElement.play();
+
+                const codeReader = new ZXing.BrowserQRCodeReader();
+                codeReader.getVideoInputDevices().then(videoInputDevices => {
+                    activeCamera = deviceId;
+                    scanner = codeReader.decodeFromVideoDevice(deviceId, videoElement, (result, err) => {
+                        if (result) {
+                            
+                            const lines = result.text.split('\n');
+                            lines.forEach(line => {
+                                lista.push(line);
+                            });
+                            resultDiv.innerHTML = `<strong>${result.text}</strong>`;
+
+                            //************* ********************* *************
+                            //************* ********************* *************
+                            //************* Escolha de personagem *************
+                            //************* ********************* *************
+                            //************* ********************* *************
+                            if (lista[0] == 'Mago' || lista[0] == 'Cavaleiro' || lista[0] == 'Barbaro' || lista[0] == 'Assassino' || lista[0] == 'Arqueiro'){
+                                alert(lista[0]);
+                                if (personagem < 1){
+                                    // Aqui, vamos converter os valores lidos do QR Code para números inteiros
+                                    const novaVida = parseInt(lines[1]);
+                                    const novoAtaque = parseInt(lines[2]);
+                                    const novaDefesa = parseInt(lines[3]);
+                                    const novaAgilidade = parseInt(lines[4]);
+
+                                    // Somando os valores lidos aos valores anteriores
+                                    valorVida += novaVida;
+                                    valorAtaque += novoAtaque;
+                                    valorDefesa += novaDefesa;
+                                    valorAgilidade += novaAgilidade;
+                                    
+                                    atualizarValorX();
+                                    personagem = personagem + 1;
+                                }else{
+                                    alert("Vc ja escaneou um personagem, se deseja trocar, reinicie a pagina.");
+                                    alert(lista);
+                                }
+                            }
+                            
+                            
+                            //************* ********************* **********
+                            //************* ********************* **********
+                            //************* Arma do personagem *************
+                            //************* ********************* **********
+                            //************* ********************* **********
+                            
+                            if (lista[0] == 'Gandr' || lista[0] == 'Excalibur' || lista[0] == 'Mjolnir'){
+                                alert(lista[0]);
+                                if(arma < 1){
+                                    const novaVida = parseInt(lines[1]);
+                                    const novoAtaque = parseInt(lines[2]);
+                                    const novaDefesa = parseInt(lines[3]);
+                                    const novaAgilidade = parseInt(lines[4]);
+
+                                    // Somando os valores lidos aos valores anteriores
+                                    valorVida += novaVida;
+                                    valorAtaque += novoAtaque;
+                                    valorDefesa += novaDefesa;
+                                    valorAgilidade += novaAgilidade;
+                                    
+                                    atualizarValorX();
+                                    arma = arma + 1;
+                                    alert(arma);
+                                }else{
+                                    alert("Vc ja escaneou um personagem, se deseja trocar, reinicie a pagina.");
+                                }
+                            }
+
+                            
+                        }
+                        while(lista.length > 0){
+                                lista.pop();
+                            }
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            console.error('Erro ao decodificar QR Code:', err);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Erro ao acessar a câmera:', error);
+            }
+            
+        }
+
+        // Função para encontrar a câmera traseira
+        async function findBackCamera() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                for (const device of devices) {
+                    if (device.kind === 'videoinput' && device.label.toLowerCase().includes('back')) {
+                        return device.deviceId;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao enumerar dispositivos:', error);
+            }
+            return null; // Retorna null se não encontrar câmera traseira
+        }
+
+        // Botão para iniciar o vídeo
+        startButton.addEventListener('click', async function() {
+            if (!scanner) {
+                activeCamera = await findBackCamera() || 'environment';
+                startCamera(activeCamera);
+            }else {
+                // Reinicia o leitor de QR Code
+                scanner.stopAsyncDecode();
+                scanner = null;
+                startCamera(activeCamera);
+            }
+        });
+
+        stopButton.addEventListener('click', function() {
+            
+            const videoElement = document.getElementById('preview');
+            videoElement.pause(); // Pausa a reprodução do vídeo
+            videoElement.srcObject = null; // Limpa o objeto de vídeo para liberar a câmera
+            scanner = null;
+            //scannerContainer.removeChild(videoElement);
+            resultDiv.innerHTML = ''; // Limpa a lista ao finalizar
+        });
+
+         // Função para alternar a visibilidade dos elementos
+        function alternarVisibilidade() {
+            elementosVisiveis = !elementosVisiveis; // Inverte o estado
+
+            // Define a propriedade display para os elementos que podem ser ocultados
+            document.getElementById('videoShow').style.display = elementosVisiveis ? 'none' : 'block';
+            document.getElementById('startButton').style.display = elementosVisiveis ? 'none' : 'block';
+            document.getElementById('stopButton').style.display = elementosVisiveis ? 'none' : 'block';
+            //document.getElementById('nameInputSection').style.display = elementosVisiveis ? 'block' : 'none';
+            document.getElementById('habilidades').style.display = elementosVisiveis ? 'block' : 'none';
+            //document.getElementsByClassName('stats-container').style.display = elementosVisiveis ? 'block' : 'none';
+            document.querySelector('h1').style.display = elementosVisiveis ? 'block' : 'none';
+            // Define a propriedade display para os elementos com a classe "stat"
+            document.querySelectorAll('.stat').forEach(el => (el.style.display = elementosVisiveis ? 'flex' : 'none'));
+        }
+
+        // Botão para mostrar ou ocultar os elementos
+        const someTudoButton = document.getElementById('someTudo');
+        someTudoButton.addEventListener('click', alternarVisibilidade);
+    </script>
+</body>
+</html>
